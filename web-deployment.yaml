@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synergychat-web
+  namespace: default
+  labels:
+    app: synergychat-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: synergychat-web
+  template:
+    metadata:
+      labels:
+        app: synergychat-web
+    spec:
+      containers:
+      - name: synergychat-web
+        image: docker.io/bootdotdev/synergychat-web:latest
+        imagePullPolicy: Always
+        env:
+          - name: WEB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: synergychat-web-configmap
+                key: WEB_PORT
+          - name: API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: synergychat-web-configmap
+                key: API_URL
